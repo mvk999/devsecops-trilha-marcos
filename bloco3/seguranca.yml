@@ -38,8 +38,11 @@ jobs:
           docker build --tag "$APP_IMAGE" ./app
           container_id=$(docker run -d -p 127.0.0.1:3000:3000 "$APP_IMAGE")
           trap 'docker rm -f "$container_id" >/dev/null' EXIT
-          curl --fail --silent --show-error --retry 10 --retry-connrefused --max-time 5 \
-            http://127.0.0.1:3000/health
+          if ! curl --fail --silent --show-error --retry 15 --retry-all-errors \
+            --retry-delay 1 --max-time 3 http://127.0.0.1:3000/health; then
+            docker logs "$container_id"
+            exit 1
+          fi
 
   semgrep:
     name: Semgrep SAST gate
