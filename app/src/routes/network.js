@@ -13,8 +13,8 @@ router.get("/ping", (req, res) => {
     return res.status(400).json({ error: "Parâmetro 'host' deve ser um IP ou hostname válido" });
   }
 
-  execFile("ping", ["-c", "2", host], (error, stdout, stderr) => {
-    if (error) return res.status(500).json({ error: "Falha ao executar ping", details: stderr });
+  execFile("ping", ["-c", "2", host], { timeout: 5000 }, (error, stdout) => {
+    if (error) return res.status(500).json({ error: "Falha ao executar ping" });
     res.json({ host, output: stdout });
   });
 });

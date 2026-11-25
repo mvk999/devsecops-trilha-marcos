@@ -29,6 +29,6 @@ docker run -p 3000:3000 task-api
 | POST | `/api/tasks` | Cria uma nova tarefa (`{ "title": "...", "owner": "..." }`) |
 | PATCH | `/api/tasks/:id` | Atualiza uma tarefa |
 | DELETE | `/api/tasks/:id` | Remove uma tarefa |
-| GET | `/api/tasks/filter?expr=...` | Filtro avançado de tarefas |
-| GET | `/api/ping?host=...` | Diagnóstico de rede |
+| GET | `/api/tasks/filter?done=true` | Filtra pelo estado (`true` ou `false`) |
+| GET | `/api/ping?host=...` | Diagnóstico local, desativado por padrão na imagem Docker |
 | GET | `/api/files/:filename` | Lê um arquivo da pasta `uploads/` |

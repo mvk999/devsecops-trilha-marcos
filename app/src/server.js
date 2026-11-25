@@ -1,5 +1,4 @@
 const express = require("express");
-const _ = require("lodash");
 
 const tasksRouter = require("./routes/tasks");
 const networkRouter = require("./routes/network");
@@ -18,22 +17,24 @@ app.get("/health", (req, res) => {
 app.get("/", (req, res) => {
   res.json({
     message: "SACI DevSecOps - API de Tarefas (código-base da trilha)",
-    endpoints: _.uniq([
+    endpoints: [
       "GET  /health",
       "GET  /api/tasks",
       "GET  /api/tasks/:id",
       "POST /api/tasks",
       "PATCH /api/tasks/:id",
       "DELETE /api/tasks/:id",
-      "GET  /api/tasks/filter?expr=...",
-      "GET  /api/ping?host=...",
+      "GET  /api/tasks/filter?done=true",
+      ...(process.env.ENABLE_PING !== "false" ? ["GET  /api/ping?host=..."] : []),
       "GET  /api/files/:filename",
-    ]),
+    ],
   });
 });
 
 app.use("/api/tasks", tasksRouter);
-app.use("/api", networkRouter); // expõe GET /api/ping
+if (process.env.ENABLE_PING !== "false") {
+  app.use("/api", networkRouter);
+}
 app.use("/api/files", filesRouter);
 
 app.listen(PORT, () => {
