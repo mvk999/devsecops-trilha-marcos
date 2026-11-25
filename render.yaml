@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: saci-task-api-marcos
+    runtime: docker
+    plan: free
+    branch: main
+    autoDeployTrigger: checksPass
+    dockerfilePath: ./app/Dockerfile
+    dockerContext: ./app
+    healthCheckPath: /health
